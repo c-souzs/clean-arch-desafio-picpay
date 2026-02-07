@@ -5,6 +5,7 @@ public enum ErrorCodeEnum {
     ON0002("Tax Number indiponivel", "ON-0002"),
     ON0003("Email indiponivel", "ON-0003"),
     ON0004("Houve um erro na criação do usuário", "ON-0004"),
+    ON0005("Não é possível criar uma carteira sem um usuário vinculado", "ON-0005"),
 
     TR0001("Usuário não tem a função transferência disponível", "TR-0001"),
     TR0002("Saldo indisponível", "TR-0002"),
