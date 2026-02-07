@@ -16,10 +16,24 @@ public class User {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public User() {
+    // Impede de instanciar vazio, fora o farmework
+    protected User() {
     }
 
-    public User(Long id, String email, String password, String fullName, TaxNumber taxNumber, UserTypeEnum type, TransactionPin transactionPin, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    // Usado no usecase
+    public User(String email, String password, String fullName, TaxNumber taxNumber, UserTypeEnum type) {
+        this.email = email;
+        this.password = password;
+        this.fullName = fullName;
+        this.taxNumber = taxNumber;
+        this.type = type;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    // Para reconstruir a entdidade
+    public User(Long id, String email, String password, String fullName, TaxNumber taxNumber,
+                UserTypeEnum type, TransactionPin transactionPin, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -31,23 +45,8 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    public User(String email, String password, String fullName, TaxNumber taxNumber, UserTypeEnum type, TransactionPin transactionPin) {
-        this.email = email;
-        this.password = password;
-        this.fullName = fullName;
-        this.taxNumber = taxNumber;
-        this.type = type;
-        this.transactionPin = transactionPin;
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-    }
-
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getEmail() {
@@ -115,7 +114,7 @@ public class User {
         if (o == null || getClass() != o.getClass()) return false;
 
         User user = (User) o;
-        return id.equals(user.id) && email.equals(user.email) && password.equals(user.password) && fullName.equals(user.fullName) && taxNumber.equals(user.taxNumber) && type == user.type && transactionPin.equals(user.transactionPin) && createdAt.equals(user.createdAt) && Objects.equals(updatedAt, user.updatedAt);
+        return id.equals(user.id) && email.equals(user.email) && password.equals(user.password) && fullName.equals(user.fullName) && taxNumber.equals(user.taxNumber) && type == user.type && Objects.equals(transactionPin, user.transactionPin) && createdAt.equals(user.createdAt) && Objects.equals(updatedAt, user.updatedAt);
     }
 
     @Override

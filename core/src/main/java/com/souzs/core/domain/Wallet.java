@@ -1,6 +1,7 @@
 package com.souzs.core.domain;
 
 import com.souzs.core.domain.enums.UserTypeEnum;
+import com.souzs.core.exception.DomainException;
 import com.souzs.core.exception.TransferException;
 import com.souzs.core.exception.enums.ErrorCodeEnum;
 
@@ -14,31 +15,38 @@ public class Wallet {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Wallet() {
+    protected Wallet() {
     }
 
+    // Reconstruir
     public Wallet(Long id, BigDecimal balance, User user, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.balance = balance;
-        this.user = user;
+        setUser(user);
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
-    public Wallet(BigDecimal balance, User user) {
-        this.balance = balance;
-        this.user = user;
+    // Usecase
+    public Wallet(User user) {
+        this.balance = BigDecimal.ZERO;
+        setUser(user);
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
+    }
+
+    private void setUser(User user) {
+        if (user == null) {
+            throw new DomainException(ErrorCodeEnum.ON0005.getMessage(), ErrorCodeEnum.ON0005.getCode());
+        }
+
+        this.user = user;
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public BigDecimal getBalance() {
         return balance;
@@ -64,10 +72,6 @@ public class Wallet {
         return user;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -79,5 +83,4 @@ public class Wallet {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
-
 }

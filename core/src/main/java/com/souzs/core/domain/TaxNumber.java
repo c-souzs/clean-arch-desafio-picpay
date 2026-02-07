@@ -6,14 +6,14 @@ import com.souzs.core.exception.enums.ErrorCodeEnum;
 public class TaxNumber {
     private String value;
 
-    public TaxNumber(String taxNumber) throws Exception {
+    public TaxNumber(String taxNumber) {
         setValue(taxNumber);
     }
 
-    public TaxNumber() {
+    protected TaxNumber() {
     }
 
-    public void setValue(String value) throws Exception {
+    public void setValue(String value) {
         if (!isValid(value)) throw new TaxNumberException(ErrorCodeEnum.ON0001.getMessage(), ErrorCodeEnum.ON0001.getCode());
         this.value = value;
     }
@@ -22,7 +22,7 @@ public class TaxNumber {
         return this.value;
     }
 
-    private Boolean isValid(String taxNumber) throws Exception {
+    private Boolean isValid(String taxNumber) {
 
         if (taxNumber.replaceAll("[^0-9]", "").length() == 11 || taxNumber.replaceAll("[^0-9]", "").length() == 14){
             if (taxNumber.length() == 11){
@@ -30,9 +30,9 @@ public class TaxNumber {
             }else{
                 return isCnpjValid(taxNumber);
             }
-        }else {
-            throw new TaxNumberException(ErrorCodeEnum.ON0001.getMessage(), ErrorCodeEnum.ON0001.getCode());
         }
+
+        return false;
     }
 
     private Boolean isCpfValid(String cpf) {

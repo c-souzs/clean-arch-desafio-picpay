@@ -1,12 +1,14 @@
 package com.souzs.core.domain;
 
 import com.souzs.core.domain.enums.TransactionalStatusEnum;
+import com.souzs.core.exception.DomainException;
+import com.souzs.core.exception.enums.ErrorCodeEnum;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Transactional {
+public class Transaction {
     private Long id;
     private Wallet fromWallet;
     private Wallet toWallet;
@@ -15,10 +17,10 @@ public class Transactional {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Transactional() {
+    public Transaction() {
     }
 
-    public Transactional(Long id, Wallet fromWallet, Wallet toWallet, BigDecimal value, TransactionalStatusEnum status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Transaction(Long id, Wallet fromWallet, Wallet toWallet, BigDecimal value, TransactionalStatusEnum status, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.fromWallet = fromWallet;
         this.toWallet = toWallet;
@@ -28,7 +30,7 @@ public class Transactional {
         this.updatedAt = updatedAt;
     }
 
-    public Transactional(Wallet fromWallet, Wallet toWallet, BigDecimal value) {
+    public Transaction(Wallet fromWallet, Wallet toWallet, BigDecimal value) {
         this.fromWallet = fromWallet;
         this.toWallet = toWallet;
         this.value = value;
@@ -41,24 +43,12 @@ public class Transactional {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public Wallet getFromWallet() {
         return fromWallet;
     }
 
-    public void setFromWallet(Wallet fromWallet) {
-        this.fromWallet = fromWallet;
-    }
-
     public Wallet getToWallet() {
         return toWallet;
-    }
-
-    public void setToWallet(Wallet toWallet) {
-        this.toWallet = toWallet;
     }
 
     public BigDecimal getValue() {
@@ -66,6 +56,10 @@ public class Transactional {
     }
 
     public void setValue(BigDecimal value) {
+        if(value.compareTo(BigDecimal.ZERO) < 0) {
+            throw new DomainException(ErrorCodeEnum.TR0003.getMessage(), ErrorCodeEnum.TR0003.getCode());
+        }
+
         this.value = value;
     }
 
@@ -93,7 +87,7 @@ public class Transactional {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
-        Transactional that = (Transactional) o;
+        Transaction that = (Transaction) o;
         return Objects.equals(id, that.id) && fromWallet.equals(that.fromWallet) && toWallet.equals(that.toWallet) && value.equals(that.value) && status == that.status && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
     }
 
