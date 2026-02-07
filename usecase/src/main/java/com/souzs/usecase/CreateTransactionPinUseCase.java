@@ -1,7 +1,7 @@
 package com.souzs.usecase;
 
-import com.souzs.core.domain.TransactionPin;
+import com.souzs.core.domain.User;
 
 public interface CreateTransactionPinUseCase {
-    void create(TransactionPin transactionPin);
+    void create(User user, String pin);
 }

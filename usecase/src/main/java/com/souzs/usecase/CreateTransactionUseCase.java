@@ -1,7 +1,7 @@
 package com.souzs.usecase;
 
-import com.souzs.core.domain.Transactional;
+import com.souzs.core.domain.Transaction;
 
 public interface CreateTransactionUseCase {
-    void create(Transactional transactional);
+    void create(Transaction transaction);
 }
