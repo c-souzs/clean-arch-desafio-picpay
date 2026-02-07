@@ -1,9 +1,11 @@
 package com.souzs.core.domain;
 
+import com.souzs.core.exception.DomainException;
 import com.souzs.core.exception.TransactionPinException;
 import com.souzs.core.exception.enums.ErrorCodeEnum;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class TransactionPin {
     private Long id;
@@ -21,7 +23,7 @@ public class TransactionPin {
     // Reconstruir
     public TransactionPin(Long id, User user, String pin, Integer attempt, Boolean blocked, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
-        this.user = user;
+        setUser(user);
         setPin(pin);
         this.attempt = attempt;
         this.blocked = blocked;
@@ -31,12 +33,20 @@ public class TransactionPin {
 
     // Usecase
     public TransactionPin(User user, String pin) {
-        this.user = user;
+        setUser(user);
         setPin(pin);
         this.attempt = DEFAULT_ATTEMPT;
         this.blocked = false;
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
+    }
+
+    private void setUser(User user) {
+        if (user == null) {
+            throw new DomainException(ErrorCodeEnum.ON0006.getMessage(), ErrorCodeEnum.ON0006.getCode());
+        }
+
+        this.user = user;
     }
 
     public Long getId() {
@@ -90,5 +100,25 @@ public class TransactionPin {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TransactionPin that = (TransactionPin) o;
+        return Objects.equals(id, that.id) && user.equals(that.user) && pin.equals(that.pin) && attempt.equals(that.attempt) && blocked.equals(that.blocked) && createdAt.equals(that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hashCode(id);
+        result = 31 * result + user.hashCode();
+        result = 31 * result + pin.hashCode();
+        result = 31 * result + attempt.hashCode();
+        result = 31 * result + blocked.hashCode();
+        result = 31 * result + createdAt.hashCode();
+        result = 31 * result + Objects.hashCode(updatedAt);
+        return result;
     }
 }

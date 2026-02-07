@@ -7,6 +7,7 @@ import com.souzs.core.exception.enums.ErrorCodeEnum;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Wallet {
     private Long id;
@@ -82,5 +83,23 @@ public class Wallet {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Wallet wallet = (Wallet) o;
+        return Objects.equals(id, wallet.id) && balance.equals(wallet.balance) && user.equals(wallet.user) && createdAt.equals(wallet.createdAt) && Objects.equals(updatedAt, wallet.updatedAt);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hashCode(id);
+        result = 31 * result + balance.hashCode();
+        result = 31 * result + user.hashCode();
+        result = 31 * result + createdAt.hashCode();
+        result = 31 * result + Objects.hashCode(updatedAt);
+        return result;
     }
 }

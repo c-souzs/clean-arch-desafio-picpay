@@ -2,6 +2,7 @@ package com.souzs.core.domain;
 
 import com.souzs.core.domain.enums.TransactionalStatusEnum;
 import com.souzs.core.exception.DomainException;
+import com.souzs.core.exception.TransferException;
 import com.souzs.core.exception.enums.ErrorCodeEnum;
 
 import java.math.BigDecimal;
@@ -22,21 +23,28 @@ public class Transaction {
 
     public Transaction(Long id, Wallet fromWallet, Wallet toWallet, BigDecimal value, TransactionalStatusEnum status, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
-        this.fromWallet = fromWallet;
-        this.toWallet = toWallet;
-        this.value = value;
+        setWallets(fromWallet, toWallet);
+        setValue(value);
         this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
     public Transaction(Wallet fromWallet, Wallet toWallet, BigDecimal value) {
-        this.fromWallet = fromWallet;
-        this.toWallet = toWallet;
-        this.value = value;
+        setWallets(fromWallet, toWallet);
+        setValue(value);
         status = TransactionalStatusEnum.CREATED;
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
+    }
+
+    private void setWallets(Wallet fromWallet, Wallet toWallet) {
+        if(fromWallet == null || toWallet == null) {
+            throw new TransferException(ErrorCodeEnum.TR0003.getMessage(), ErrorCodeEnum.TR0003.getCode());
+        }
+
+        this.fromWallet = fromWallet;
+        this.toWallet = toWallet;
     }
 
     public Long getId() {
