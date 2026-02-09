@@ -4,8 +4,7 @@ import com.souzs.core.domain.TaxNumber;
 import com.souzs.core.domain.TransactionPin;
 import com.souzs.core.domain.User;
 import com.souzs.core.domain.enums.UserTypeEnum;
-import com.souzs.core.exception.EmailException;
-import com.souzs.core.exception.TaxNumberException;
+import com.souzs.core.exception.DomainException;
 import com.souzs.core.exception.enums.ErrorCodeEnum;
 import com.souzs.gateway.SaveUserGateway;
 import com.souzs.usecase.*;
@@ -29,7 +28,7 @@ public class ImplCreateUserUseCase implements CreateUserUseCase {
 
 
     @Override
-    public void create(Long id, String email, String password, String fullName, String taxNumber, String type, LocalDateTime createdAt, LocalDateTime updatedAt, String pin) {
+    public void create(String email, String password, String fullName, String taxNumber, String type, String pin) {
         boolean hasTaxNumberAv = taxNumberAvailableUseCase.taxNumberAvailable(
                 taxNumber
         );
@@ -39,11 +38,11 @@ public class ImplCreateUserUseCase implements CreateUserUseCase {
         );
 
         if(!hasTaxNumberAv) {
-            throw new TaxNumberException(ErrorCodeEnum.ON0002.getMessage(), ErrorCodeEnum.ON0002.getCode());
+            throw new DomainException(ErrorCodeEnum.ON0002);
         }
 
         if(!hasEmailAv) {
-            throw new EmailException(ErrorCodeEnum.ON0003.getMessage(), ErrorCodeEnum.ON0003.getCode());
+            throw new DomainException(ErrorCodeEnum.ON0003);
         }
 
         TaxNumber taxNumberUser = new TaxNumber(taxNumber);

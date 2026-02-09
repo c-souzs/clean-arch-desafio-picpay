@@ -1,10 +1,13 @@
 package com.souzs.core.exception;
 
-public class DomainException extends RuntimeException {
-    private String code;
+import com.souzs.core.exception.enums.ErrorCodeEnum;
 
-    public DomainException(String message, String code) {
-        super(message);
-        this.code = code;
+public class DomainException extends BaseException {
+    public DomainException(ErrorCodeEnum errorCode) {
+        super(errorCode);
+    }
+
+    public DomainException(ErrorCodeEnum errorCode, Object... args) {
+        super(errorCode, args);
     }
 }

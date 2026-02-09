@@ -38,7 +38,7 @@ public class Wallet {
 
     private void setUser(User user) {
         if (user == null) {
-            throw new DomainException(ErrorCodeEnum.ON0005.getMessage(), ErrorCodeEnum.ON0005.getCode());
+            throw new DomainException(ErrorCodeEnum.ON0005);
         }
 
         this.user = user;
@@ -47,7 +47,6 @@ public class Wallet {
     public Long getId() {
         return id;
     }
-
 
     public BigDecimal getBalance() {
         return balance;
@@ -59,11 +58,11 @@ public class Wallet {
 
     public void transfer(BigDecimal value) {
         if(user.getType().equals(UserTypeEnum.SHOPKEEPER)) {
-            throw new TransferException(ErrorCodeEnum.TR0001.getCode(), ErrorCodeEnum.TR0001.getMessage());
+            throw new TransferException(ErrorCodeEnum.TR0001);
         }
 
         if(balance.compareTo(value) < 0) {
-            throw new TransferException(ErrorCodeEnum.TR0002.getMessage(), ErrorCodeEnum.TR0002.getCode());
+            throw new TransferException(ErrorCodeEnum.TR0002);
         }
 
         this.balance = balance.subtract(value);
@@ -81,8 +80,8 @@ public class Wallet {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setUpdatedAt() {
+        this.updatedAt = LocalDateTime.now();
     }
 
     @Override

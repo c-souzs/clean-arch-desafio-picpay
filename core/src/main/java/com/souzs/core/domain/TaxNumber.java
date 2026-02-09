@@ -1,6 +1,6 @@
 package com.souzs.core.domain;
 
-import com.souzs.core.exception.TaxNumberException;
+import com.souzs.core.exception.DomainException;
 import com.souzs.core.exception.enums.ErrorCodeEnum;
 
 public class TaxNumber {
@@ -14,7 +14,7 @@ public class TaxNumber {
     }
 
     public void setValue(String value) {
-        if (!isValid(value)) throw new TaxNumberException(ErrorCodeEnum.ON0001.getMessage(), ErrorCodeEnum.ON0001.getCode());
+        if (!isValid(value)) throw new DomainException(ErrorCodeEnum.ON0001);
         this.value = value;
     }
 

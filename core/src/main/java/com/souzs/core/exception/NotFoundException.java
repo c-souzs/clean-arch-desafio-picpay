@@ -1,10 +1,9 @@
 package com.souzs.core.exception;
 
-public class NotFoundException extends RuntimeException {
-    private String code;
+import com.souzs.core.exception.enums.ErrorCodeEnum;
 
-    public NotFoundException(String message, String code) {
-        super(message);
-        this.code = code;
+public class NotFoundException extends BaseException {
+    public NotFoundException(ErrorCodeEnum errorCode) {
+        super(errorCode);
     }
 }

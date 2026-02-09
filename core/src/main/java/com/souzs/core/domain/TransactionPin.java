@@ -1,8 +1,6 @@
 package com.souzs.core.domain;
 
 import com.souzs.core.exception.DomainException;
-import com.souzs.core.exception.TransactionPinException;
-import com.souzs.core.exception.enums.ErrorCodeEnum;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -43,7 +41,7 @@ public class TransactionPin {
 
     private void setUser(User user) {
         if (user == null) {
-            throw new DomainException(ErrorCodeEnum.ON0006.getMessage(), ErrorCodeEnum.ON0006.getCode());
+            throw new DomainException(ErrorCodeEnum.ON0006);
         }
 
         this.user = user;
@@ -57,7 +55,6 @@ public class TransactionPin {
         return user;
     }
 
-
     public String getPin() {
         return pin;
     }
@@ -70,7 +67,7 @@ public class TransactionPin {
 
     private void pinIsValid(String pin) {
         if(pin.length() != 8) {
-            throw new TransactionPinException(ErrorCodeEnum.TR0001.getMessage(), ErrorCodeEnum.TR0001.getCode());
+            throw new DomainException(ErrorCodeEnum.TRP0001);
         }
     }
 
@@ -99,7 +96,7 @@ public class TransactionPin {
     }
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
+        this.updatedAt = LocalDateTime.now();
     }
 
     @Override

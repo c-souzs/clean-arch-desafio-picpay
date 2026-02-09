@@ -13,11 +13,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.souzs</groupId>
-            <artifactId>infrastructure</artifactId>
-            <version>${project.version}</version> <!-- Variavel interna do maven que garante que o modulo sempre importe as versoes geradas pelos outros modulo, dada uma mesma build -->
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
