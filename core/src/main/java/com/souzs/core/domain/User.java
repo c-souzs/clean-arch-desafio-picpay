@@ -149,23 +149,17 @@ public class User {
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
+        
         if (o == null || getClass() != o.getClass()) return false;
-
+        
         User user = (User) o;
-        return Objects.equals(id, user.id) && email.equals(user.email) && password.equals(user.password) && fullName.equals(user.fullName) && Objects.equals(taxNumber, user.taxNumber) && type == user.type && Objects.equals(transactionPin, user.transactionPin) && createdAt.equals(user.createdAt) && Objects.equals(updatedAt, user.updatedAt);
+        
+        return Objects.equals(email, user.email) && Objects.equals(taxNumber, user.taxNumber);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hashCode(id);
-        result = 31 * result + email.hashCode();
-        result = 31 * result + password.hashCode();
-        result = 31 * result + fullName.hashCode();
-        result = 31 * result + Objects.hashCode(taxNumber);
-        result = 31 * result + Objects.hashCode(type);
-        result = 31 * result + Objects.hashCode(transactionPin);
-        result = 31 * result + createdAt.hashCode();
-        result = 31 * result + Objects.hashCode(updatedAt);
-        return result;
+        return Objects.hash(email, taxNumber);
     }
 }

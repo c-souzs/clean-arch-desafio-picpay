@@ -101,21 +101,17 @@ public class TransactionPin {
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
+        
         if (o == null || getClass() != o.getClass()) return false;
-
+        
         TransactionPin that = (TransactionPin) o;
-        return Objects.equals(id, that.id) && user.equals(that.user) && pin.equals(that.pin) && attempt.equals(that.attempt) && blocked.equals(that.blocked) && createdAt.equals(that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
+        
+        return Objects.equals(user, that.user);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hashCode(id);
-        result = 31 * result + user.hashCode();
-        result = 31 * result + pin.hashCode();
-        result = 31 * result + attempt.hashCode();
-        result = 31 * result + blocked.hashCode();
-        result = 31 * result + createdAt.hashCode();
-        result = 31 * result + Objects.hashCode(updatedAt);
-        return result;
+        return Objects.hash(user);
     }
 }

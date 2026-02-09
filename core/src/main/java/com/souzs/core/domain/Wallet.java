@@ -86,19 +86,17 @@ public class Wallet {
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
+        
         if (o == null || getClass() != o.getClass()) return false;
-
+        
         Wallet wallet = (Wallet) o;
-        return Objects.equals(id, wallet.id) && balance.equals(wallet.balance) && user.equals(wallet.user) && createdAt.equals(wallet.createdAt) && Objects.equals(updatedAt, wallet.updatedAt);
+        
+        return Objects.equals(user, wallet.user);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hashCode(id);
-        result = 31 * result + balance.hashCode();
-        result = 31 * result + user.hashCode();
-        result = 31 * result + createdAt.hashCode();
-        result = 31 * result + Objects.hashCode(updatedAt);
-        return result;
+        return Objects.hash(user);
     }
 }

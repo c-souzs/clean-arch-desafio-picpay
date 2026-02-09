@@ -93,20 +93,21 @@ public class Transaction {
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
+        
         if (o == null || getClass() != o.getClass()) return false;
-
+        
         Transaction that = (Transaction) o;
-        return Objects.equals(id, that.id) && fromWallet.equals(that.fromWallet) && toWallet.equals(that.toWallet) && value.equals(that.value) && status == that.status && Objects.equals(createdAt, that.createdAt);
+        
+        if (id != null && that.id != null) return Objects.equals(id, that.id);
+        return Objects.equals(fromWallet, that.fromWallet) &&
+                Objects.equals(toWallet, that.toWallet) &&
+                Objects.equals(value, that.value) &&
+                Objects.equals(createdAt, that.createdAt);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hashCode(id);
-        result = 31 * result + fromWallet.hashCode();
-        result = 31 * result + toWallet.hashCode();
-        result = 31 * result + value.hashCode();
-        result = 31 * result + status.hashCode();
-        result = 31 * result + Objects.hashCode(createdAt);
-        return result;
+        return Objects.hash(fromWallet, toWallet, value, createdAt);
     }
 }
