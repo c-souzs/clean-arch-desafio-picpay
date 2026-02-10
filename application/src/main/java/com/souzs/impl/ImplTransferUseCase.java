@@ -19,6 +19,14 @@ public class ImplTransferUseCase implements TransferUseCase {
     private SaveTransferGateway saveTransferGateway;
     private UpdateBalanceWalletGateway updateBalanceWalletGateway;
 
+    public ImplTransferUseCase(FindWalletByTaxNumberUseCase findWalletByTaxNumberUseCase, TransactionValidateUseCase transactionValidateUseCase, CreateTransactionUseCase createTransactionUseCase, SaveTransferGateway saveTransferGateway, UpdateBalanceWalletGateway updateBalanceWalletGateway) {
+        this.findWalletByTaxNumberUseCase = findWalletByTaxNumberUseCase;
+        this.transactionValidateUseCase = transactionValidateUseCase;
+        this.createTransactionUseCase = createTransactionUseCase;
+        this.saveTransferGateway = saveTransferGateway;
+        this.updateBalanceWalletGateway = updateBalanceWalletGateway;
+    }
+
     @Override
     public void transfer(String from, String to, BigDecimal value) {
         TaxNumber fromTaxNumber = new TaxNumber(from);
