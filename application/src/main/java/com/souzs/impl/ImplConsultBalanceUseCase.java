@@ -9,6 +9,10 @@ import java.math.BigDecimal;
 public class ImplConsultBalanceUseCase implements ConsultBalanceUseCase {
     private ConsultBalanceGateway consultBalanceGateway;
 
+    public ImplConsultBalanceUseCase(ConsultBalanceGateway consultBalanceGateway) {
+        this.consultBalanceGateway = consultBalanceGateway;
+    }
+
     @Override
     public BigDecimal consult(User user) {
         Long idWallet = user.getWallet().getId();
