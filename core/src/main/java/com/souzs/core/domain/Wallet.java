@@ -23,12 +23,12 @@ public class Wallet {
     public Wallet(Long id, BigDecimal balance, User user, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.balance = balance;
-        setUser(user);
+        this.user = user;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
-    // Usecase
+    // Para Usecase
     public Wallet(User user) {
         this.balance = BigDecimal.ZERO;
         setUser(user);

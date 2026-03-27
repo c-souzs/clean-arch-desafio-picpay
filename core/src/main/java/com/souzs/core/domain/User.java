@@ -23,18 +23,22 @@ public class User {
     protected User() {
     }
 
-    // Usado no usecase
+    // Para Usecase
     public User(String email, String password, String fullName, TaxNumber taxNumber, UserTypeEnum type) {
         setValuesNonNull(email, password, fullName, taxNumber, type);
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
 
-    // Para reconstruir a entdidade
+    // Reconstruir
     public User(Long id, String email, String password, String fullName, TaxNumber taxNumber,
                 UserTypeEnum type, Wallet wallet, TransactionPin transactionPin, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        setValuesNonNull(email, password, fullName, taxNumber, type);
         this.id = id;
+        this.email = email;
+        this.password = password;
+        this.fullName = fullName;
+        this.taxNumber = taxNumber;
+        this.type = type;
         this.wallet = wallet;
         this.transactionPin = transactionPin;
         this.createdAt = createdAt;

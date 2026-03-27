@@ -10,8 +10,7 @@ public class TransactionPin {
     private Long id;
     private User user;
     private String pin;
-    private Integer attempt;
-    private Boolean blocked;
+    private Integer remainingAttempts;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private static final Integer DEFAULT_ATTEMPT = 3;
@@ -20,22 +19,20 @@ public class TransactionPin {
     }
 
     // Reconstruir
-    public TransactionPin(Long id, User user, String pin, Integer attempt, Boolean blocked, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public TransactionPin(Long id, User user, String pin, Integer attempt, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
-        setUser(user);
-        setPin(pin);
-        this.attempt = attempt;
-        this.blocked = blocked;
+        this.user = user;
+        this.pin = pin;
+        this.remainingAttempts = attempt;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
-    // Usecase
+    // Para Usecase
     public TransactionPin(User user, String pin) {
         setUser(user);
         setPin(pin);
-        this.attempt = DEFAULT_ATTEMPT;
-        this.blocked = false;
+        this.remainingAttempts = DEFAULT_ATTEMPT;
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
     }
@@ -46,6 +43,19 @@ public class TransactionPin {
         }
 
         this.user = user;
+    }
+
+    public Boolean tryPin(String inputPin) {
+        if (getBlocked()) {
+            throw new DomainException(ErrorCodeEnum.PIN0001);
+        }
+
+        if (!this.pin.equals(inputPin)) {
+            remainingAttempts -= 1;
+            return false;
+        }
+
+        return true;
     }
 
     public Long getId() {
@@ -72,20 +82,16 @@ public class TransactionPin {
         }
     }
 
-    public Integer getAttempt() {
-        return attempt;
-    }
-
-    public void setAttempt(Integer attempt) {
-        this.attempt = attempt;
+    public Integer getRemainingAttempts() {
+        return remainingAttempts;
     }
 
     public Boolean getBlocked() {
-        return blocked;
+        return remainingAttempts == 0;
     }
 
-    public void setBlocked(Boolean blocked) {
-        this.blocked = blocked;
+    public void incorrectAttempt() {
+        remainingAttempts-=1;
     }
 
     public LocalDateTime getCreatedAt() {

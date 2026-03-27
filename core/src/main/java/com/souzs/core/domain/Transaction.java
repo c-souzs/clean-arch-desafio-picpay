@@ -23,14 +23,17 @@ public class Transaction {
     public Transaction() {
     }
 
+    // Reconstruir
     public Transaction(Long id, Wallet fromWallet, Wallet toWallet, BigDecimal value, TransactionalStatusEnum status, LocalDateTime createdAt) {
         this.id = id;
-        setWallets(fromWallet, toWallet);
-        setValue(value);
+        this.fromWallet = fromWallet;
+        this.toWallet = toWallet;
+        this.value = value;
         this.status = status;
         this.createdAt = createdAt;
     }
 
+    // Para Usecase
     public Transaction(Wallet fromWallet, Wallet toWallet, BigDecimal value) {
         setWallets(fromWallet, toWallet);
         setValue(value);
