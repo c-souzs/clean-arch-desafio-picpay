@@ -29,7 +29,7 @@ public class TaxNumber {
         return false;
     }
 
-    private Boolean isCpfValid(String cpf) {
+    private boolean isCpfValid(String cpf) {
         int sum = 0;
         for (int i = 0; i < 9; i++) {
             sum += (cpf.charAt(i) - '0') * (10 - i);

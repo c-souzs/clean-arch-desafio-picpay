@@ -45,7 +45,7 @@ public class TransactionPin {
         this.user = user;
     }
 
-    public Boolean tryPin(String inputPin) {
+    public boolean tryPin(String inputPin) {
         if (getBlocked()) {
             throw new DomainException(ErrorCodeEnum.PIN0001);
         }
@@ -86,7 +86,7 @@ public class TransactionPin {
         return remainingAttempts;
     }
 
-    public Boolean getBlocked() {
+    public boolean getBlocked() {
         return remainingAttempts == 0;
     }
 
