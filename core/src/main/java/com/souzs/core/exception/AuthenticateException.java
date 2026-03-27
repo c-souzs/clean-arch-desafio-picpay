@@ -1,10 +1,9 @@
 package com.souzs.core.exception;
 
-public class AuthenticateException extends RuntimeException {
-    private String code;
+import com.souzs.core.exception.enums.ErrorCodeEnum;
 
-    public AuthenticateException(String message, String code) {
-        super(message);
-        this.code = code;
+public class AuthenticateException extends BaseException {
+    public AuthenticateException(ErrorCodeEnum errorCode) {
+        super(errorCode);
     }
 }

@@ -1,10 +1,13 @@
 package com.souzs.core.exception;
 
-public class TransactionPinException extends RuntimeException {
-    private String code;
+import com.souzs.core.exception.enums.ErrorCodeEnum;
 
-    public TransactionPinException(String message, String code) {
-        super(message);
-        this.code = code;
+public class TransactionPinException extends BaseException {
+    public TransactionPinException(ErrorCodeEnum errorCode) {
+        super(errorCode);
+    }
+
+    public TransactionPinException(ErrorCodeEnum errorCode, Object... args) {
+        super(errorCode, args);
     }
 }

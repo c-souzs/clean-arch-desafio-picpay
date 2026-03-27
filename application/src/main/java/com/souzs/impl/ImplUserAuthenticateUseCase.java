@@ -15,7 +15,7 @@ public class ImplUserAuthenticateUseCase implements UserAuthenticateUseCase {
     @Override
     public void authenticate(String username, String password) {
         if(!userAuthenticateGateway.authenticate(username, password)) {
-            throw new AuthenticateException(ErrorCodeEnum.ATH0001.getMessage(), ErrorCodeEnum.ATH0001.getCode());
+            throw new AuthenticateException(ErrorCodeEnum.ATH0001);
         }
     }
 }

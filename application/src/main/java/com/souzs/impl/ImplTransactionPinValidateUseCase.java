@@ -18,14 +18,11 @@ public class ImplTransactionPinValidateUseCase implements TransactionPinValidate
         TransactionPin transactionPinUser = findTransactionPinByUserIdGateway.findTransactionPinByUser(idUser);
 
         if(transactionPinUser.getBlocked()) {
-            throw new TransactionPinException(ErrorCodeEnum.PIN0001.getMessage(), ErrorCodeEnum.PIN0001.getCode());
+            throw new TransactionPinException(ErrorCodeEnum.PIN0001);
         }
 
         if (!transactionPinUser.tryPin(transactionPin.getPin())) {
-            throw new TransactionPinException(
-                    String.format(ErrorCodeEnum.PIN0002.getMessage(), transactionPinUser.getRemainingAttempts()),
-                    ErrorCodeEnum.PIN0002.getCode()
-            );
+            throw new TransactionPinException(ErrorCodeEnum.PIN0002, transactionPinUser.getRemainingAttempts());
         }
 
     }

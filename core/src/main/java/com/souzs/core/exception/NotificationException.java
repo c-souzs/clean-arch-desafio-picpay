@@ -1,10 +1,9 @@
 package com.souzs.core.exception;
 
-public class NotificationException extends RuntimeException {
-  private String code;
+import com.souzs.core.exception.enums.ErrorCodeEnum;
 
-  public NotificationException(String message, String code) {
-    super(message);
-    this.code = code;
-  }
+public class NotificationException extends BaseException {
+    public NotificationException(ErrorCodeEnum errorCode) {
+        super(errorCode);
+    }
 }
