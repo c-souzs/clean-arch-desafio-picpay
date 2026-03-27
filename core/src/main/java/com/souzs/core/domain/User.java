@@ -14,6 +14,7 @@ public class User {
     private String fullName;
     private TaxNumber taxNumber;
     private UserTypeEnum type;
+    private Wallet wallet;
     private TransactionPin transactionPin;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -31,8 +32,10 @@ public class User {
 
     // Para reconstruir a entdidade
     public User(Long id, String email, String password, String fullName, TaxNumber taxNumber,
-                UserTypeEnum type, TransactionPin transactionPin, LocalDateTime createdAt, LocalDateTime updatedAt) {
+                UserTypeEnum type, Wallet wallet, TransactionPin transactionPin, LocalDateTime createdAt, LocalDateTime updatedAt) {
         setValuesNonNull(email, password, fullName, taxNumber, type);
+        this.id = id;
+        this.wallet = wallet;
         this.transactionPin = transactionPin;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -133,6 +136,10 @@ public class User {
     public void setTransactionPin(TransactionPin transactionPin) {
         this.transactionPin = transactionPin;
         setUpdatedAt();
+    }
+
+    public Wallet getWallet() {
+        return wallet;
     }
 
     public LocalDateTime getCreatedAt() {

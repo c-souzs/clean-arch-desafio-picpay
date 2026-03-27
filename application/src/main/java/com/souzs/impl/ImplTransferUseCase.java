@@ -11,6 +11,7 @@ import com.souzs.gateway.UpdateBalanceWalletGateway;
 import com.souzs.usecase.CreateTransactionUseCase;
 import com.souzs.usecase.FindWalletByTaxNumberUseCase;
 import com.souzs.usecase.TransferUseCase;
+import com.souzs.usecase.UserNotificationUseCase;
 
 import java.math.BigDecimal;
 
@@ -20,13 +21,18 @@ public class ImplTransferUseCase implements TransferUseCase {
     private SaveTransferGateway saveTransferGateway;
     private UpdateBalanceWalletGateway updateBalanceWalletGateway;
     private ConsultAuthorizationExternalGateway consultAuthorizationExternalGateway;
+    private UserNotificationUseCase userNotificationUseCase;
 
-    public ImplTransferUseCase(FindWalletByTaxNumberUseCase findWalletByTaxNumberUseCase, CreateTransactionUseCase createTransactionUseCase, SaveTransferGateway saveTransferGateway, UpdateBalanceWalletGateway updateBalanceWalletGateway, ConsultAuthorizationExternalGateway consultAuthorizationExternalGateway) {
+    public ImplTransferUseCase(
+            FindWalletByTaxNumberUseCase findWalletByTaxNumberUseCase, CreateTransactionUseCase createTransactionUseCase,
+            SaveTransferGateway saveTransferGateway, UpdateBalanceWalletGateway updateBalanceWalletGateway,
+            ConsultAuthorizationExternalGateway consultAuthorizationExternalGateway, UserNotificationUseCase userNotificationUseCase) {
         this.findWalletByTaxNumberUseCase = findWalletByTaxNumberUseCase;
         this.createTransactionUseCase = createTransactionUseCase;
         this.saveTransferGateway = saveTransferGateway;
         this.updateBalanceWalletGateway = updateBalanceWalletGateway;
         this.consultAuthorizationExternalGateway = consultAuthorizationExternalGateway;
+        this.userNotificationUseCase = userNotificationUseCase;
     }
 
     @Override
@@ -58,5 +64,7 @@ public class ImplTransferUseCase implements TransferUseCase {
         updateBalanceWalletGateway.update(fromWallet);
 
         saveTransferGateway.save(transaction);
+
+        userNotificationUseCase.notificate(transaction);
     }
 }

@@ -1,6 +1,7 @@
 package com.souzs.core.domain;
 
 import com.souzs.core.exception.DomainException;
+import com.souzs.core.exception.enums.ErrorCodeEnum;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

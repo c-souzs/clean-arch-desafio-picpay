@@ -1,7 +1,7 @@
-package com.souzs.usecase;
+package com.souzs.gateway;
 
 import com.souzs.core.domain.Transaction;
 
-public interface UserNotificationUseCase {
+public interface UserNotificationGateway {
     void notificate(Transaction transaction);
 }
