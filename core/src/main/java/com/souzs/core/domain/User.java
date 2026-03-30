@@ -14,8 +14,7 @@ public class User {
     private String fullName;
     private TaxNumber taxNumber;
     private UserTypeEnum type;
-    private Wallet wallet;
-    private TransactionPin transactionPin;
+    private Long walletId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -32,15 +31,14 @@ public class User {
 
     // Reconstruir
     public User(Long id, String email, String password, String fullName, TaxNumber taxNumber,
-                UserTypeEnum type, Wallet wallet, TransactionPin transactionPin, LocalDateTime createdAt, LocalDateTime updatedAt) {
+                UserTypeEnum type, Long walletId, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.fullName = fullName;
         this.taxNumber = taxNumber;
         this.type = type;
-        this.wallet = wallet;
-        this.transactionPin = transactionPin;
+        this.walletId = walletId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -57,42 +55,28 @@ public class User {
 
     private void validFieldsNonNull(String email, String password, String fullName, TaxNumber taxNumber,
                                     UserTypeEnum type) {
-        if(
-                isInvalidString(email) ||
-                isInvalidString(password) ||
-                isInvalidString(fullName) ||
-                taxNumber == null ||
-                type == null
-        ) {
+        checkValueNull(email);
+        checkValueNull(password);
+        checkValueNull(fullName);
+        checkValueNull(taxNumber);
+        checkValueNull(type);
+    }
+
+    private void checkValueNull(Object value) {
+        if(value == null || (value instanceof String && ((String) value).isBlank())) {
             throw new DomainException(ErrorCodeEnum.ON0004);
         }
-    }
-
-    private boolean isInvalidString(String value) {
-        return value == null || value.isBlank();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public void setEmail(String email) {
         boolean valid = email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
 
         if(!valid) {
-            throw new DomainException(ErrorCodeEnum.ON0003);
+            throw new DomainException(ErrorCodeEnum.ON0008);
         }
 
         this.email = email;
         setUpdatedAt();
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public void setPassword(String password) {
@@ -106,44 +90,57 @@ public class User {
         setUpdatedAt();
     }
 
-    public String getFullName() {
-        return fullName;
-    }
-
     public void setFullName(String fullName) {
+        checkValueNull(fullName);
+
         this.fullName = fullName;
         setUpdatedAt();
+    }
+
+    public void setTaxNumber(TaxNumber taxNumber) {
+        checkValueNull(taxNumber);
+
+        this.taxNumber = taxNumber;
+        setUpdatedAt();
+    }
+
+    public void setType(UserTypeEnum type) {
+        checkValueNull(type);
+
+        this.type = type;
+        setUpdatedAt();
+    }
+
+    public void setUpdatedAt() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getFullName() {
+        return fullName;
     }
 
     public TaxNumber getTaxNumber() {
         return taxNumber;
     }
 
-    public void setTaxNumber(TaxNumber taxNumber) {
-        this.taxNumber = taxNumber;
-        setUpdatedAt();
-    }
-
     public UserTypeEnum getType() {
         return type;
     }
 
-    public void setType(UserTypeEnum type) {
-        this.type = type;
-        setUpdatedAt();
-    }
-
-    public TransactionPin getTransactionPin() {
-        return transactionPin;
-    }
-
-    public void setTransactionPin(TransactionPin transactionPin) {
-        this.transactionPin = transactionPin;
-        setUpdatedAt();
-    }
-
-    public Wallet getWallet() {
-        return wallet;
+    public Long getWalletId() {
+        return walletId;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -154,23 +151,15 @@ public class User {
         return updatedAt;
     }
 
-    public void setUpdatedAt() {
-        this.updatedAt = LocalDateTime.now();
-    }
-
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        
         if (o == null || getClass() != o.getClass()) return false;
-        
         User user = (User) o;
-        
-        return Objects.equals(email, user.email) && Objects.equals(taxNumber, user.taxNumber);
+        return id != null && id.equals(user.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(email, taxNumber);
+        return Objects.hash(id);
     }
 }

@@ -1,5 +1,6 @@
 package com.souzs.impl;
 
+import com.souzs.core.domain.TransactionPin;
 import com.souzs.core.domain.User;
 import com.souzs.core.domain.Wallet;
 import com.souzs.gateway.SaveWalletGateway;
@@ -13,8 +14,8 @@ public class ImplCreateWalletUseCase implements CreateWalletUseCase {
     }
 
     @Override
-    public void create(User user) {
-        Wallet wallet = new Wallet(user);
+    public void create(User user, TransactionPin transactionPin) {
+        Wallet wallet = new Wallet(user, transactionPin);
 
         saveWalletGateway.save(wallet);
     }

@@ -55,8 +55,8 @@ public class ImplCreateUserUseCase implements CreateUserUseCase {
 
         userSaved = saveUserGateway.save(userSaved);
 
-        createTransactionPinUseCase.create(userSaved, pin);
+        createWalletUseCase.create(userSaved, transactionPinCreated);
 
-        createWalletUseCase.create(userSaved);
+        TransactionPin transactionPinCreated = createTransactionPinUseCase.create(userSaved, pin);
     }
 }

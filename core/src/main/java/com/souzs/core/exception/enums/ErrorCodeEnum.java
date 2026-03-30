@@ -6,8 +6,9 @@ public enum ErrorCodeEnum {
     ON0003("E-mail já cadastrado: este endereço já está vinculado a outra conta", "ON-0003"),
     ON0004("Dados obrigatórios ausentes: e-mail, senha, nome, documento e tipo são obrigatórios", "ON-0004"),
     ON0005("Carteira sem usuário: é necessário vincular um usuário para criar a carteira", "ON-0005"),
-    ON0006("Pin de transação sem usuário: é necessário vincular um usuário para criar o pin", "ON-0006"),
+    ON0006("Pin de transação sem carteira: é necessário vincular uma carteira para criar o pin", "ON-0006"),
     ON0007("Senha fraca: a senha deve ter no mínimo 7 caracteres, 1 maiúscula, 1 número e 1 caractere especial", "ON-0007"),
+    ON0008("E-mail inválido: este endereço está mal formatado ou inválido", "ON-0008"),
 
     TR0001("Transferência não permitida: lojistas não podem realizar transferências", "TR-0001"),
     TR0002("Saldo insuficiente: o valor da transferência excede o saldo disponível", "TR-0002"),
@@ -15,8 +16,10 @@ public enum ErrorCodeEnum {
     TR0004("Transferência não autorizada: a operação foi negada pelo serviço de autorização", "TR-0004"),
     TR0005("Valor inválido: o valor da transação não pode ser negativo", "TR-0005"),
     TR0006("Transação finalizada: não é possível alterar uma transação já concluída ou cancelada", "TR-0006"),
+    TR0007("Valor inválido: Não é permitido receber valores negativos em transações", "TR-0007"),
 
-    TRP0001("Pin de transação inválido: o pin deve ter exatamente 8 caracteres", "TRP-0001"),
+    TRP0001("Pin de transação vazio: o pin deve ser preenchido", "TRP-0001"),
+    TRP0002("Pin de transação inválido: o pin deve ter exatamente 8 caracteres", "TRP-0002"),
 
     WA0001("Carteira não encontrada: nenhuma carteira corresponde ao identificador informado", "WA-0001"),
 

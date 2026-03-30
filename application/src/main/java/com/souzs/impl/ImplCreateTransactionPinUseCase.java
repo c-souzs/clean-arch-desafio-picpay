@@ -2,6 +2,7 @@ package com.souzs.impl;
 
 import com.souzs.core.domain.TransactionPin;
 import com.souzs.core.domain.User;
+import com.souzs.core.domain.Wallet;
 import com.souzs.gateway.SaveTransactionPinGateway;
 import com.souzs.usecase.CreateTransactionPinUseCase;
 
@@ -13,9 +14,9 @@ public class ImplCreateTransactionPinUseCase implements CreateTransactionPinUseC
     }
 
     @Override
-    public void create(User user, String pin) {
-        TransactionPin transactionPin = new TransactionPin(user, pin);
+    public TransactionPin create(Wallet wallet, String pin) {
+        TransactionPin transactionPin = new TransactionPin(wallet, pin);
 
-        saveTransactionPinGateway.save(transactionPin);
+        return saveTransactionPinGateway.save(transactionPin);
     }
 }
