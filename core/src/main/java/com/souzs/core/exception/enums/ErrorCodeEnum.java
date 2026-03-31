@@ -17,6 +17,7 @@ public enum ErrorCodeEnum {
     TR0005("Valor inválido: o valor da transação não pode ser negativo", "TR-0005"),
     TR0006("Transação finalizada: não é possível alterar uma transação já concluída ou cancelada", "TR-0006"),
     TR0007("Valor inválido: Não é permitido receber valores negativos em transações", "TR-0007"),
+    TR0008("Transferência não permitida: Ocorreu um erro de validação no momento da transferência, verifique se os dados informados são válidos", "TR-0007"),
 
     TRP0001("Pin de transação vazio: o pin deve ser preenchido", "TRP-0001"),
     TRP0002("Pin de transação inválido: o pin deve ter exatamente 8 caracteres", "TRP-0002"),

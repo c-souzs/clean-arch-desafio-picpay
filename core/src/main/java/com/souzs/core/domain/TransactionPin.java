@@ -9,7 +9,7 @@ import java.util.Objects;
 public class TransactionPin {
     private Long id;
     private String pin;
-    private Wallet wallet;
+    private Long walletId;
     private Integer remainingAttempts;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -19,30 +19,48 @@ public class TransactionPin {
     }
 
     // Reconstruir
-    public TransactionPin(Long id, String pin, Integer attempt, Wallet wallet, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public TransactionPin(Long id, String pin, Integer attempt, Long walletId, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.pin = pin;
-        this.wallet = wallet;
+        this.walletId = walletId;
         this.remainingAttempts = attempt;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
     // Para Usecase
-    public TransactionPin(Wallet wallet, String pin) {
-        setWallet(wallet);
+    public TransactionPin(Long walletId, String pin) {
+        setWalletId(walletId);
         setPin(pin);
         this.remainingAttempts = DEFAULT_ATTEMPT;
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
     }
 
-    private void setWallet(Wallet wallet) {
-        if(wallet == null) {
+    private void setWalletId(Long walletId) {
+        if(walletId == null) {
             throw new DomainException(ErrorCodeEnum.ON0006);
         }
 
-        this.wallet = wallet;
+        this.walletId = walletId;
+        setUpdatedAt();
+    }
+
+    public void setPin(String pin) {
+        pinIsValid(pin);
+
+        this.pin = pin;
+        setUpdatedAt();
+    }
+
+    private void setUpdatedAt() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    private void pinIsValid(String pin) {
+        if(pin.length() != 8) {
+            throw new DomainException(ErrorCodeEnum.TRP0002);
+        }
     }
 
     public boolean tryPin(String inputPin) {
@@ -52,14 +70,15 @@ public class TransactionPin {
 
         if (!this.pin.equals(inputPin)) {
             remainingAttempts -= 1;
+            setUpdatedAt();
             return false;
         }
 
         return true;
     }
 
-    public Wallet getWallet() {
-        return wallet;
+    public Long getWalletId() {
+        return walletId;
     }
 
     public Long getId() {
@@ -68,18 +87,6 @@ public class TransactionPin {
 
     public String getPin() {
         return pin;
-    }
-
-    public void setPin(String pin) {
-        pinIsValid(pin);
-
-        this.pin = pin;
-    }
-
-    private void pinIsValid(String pin) {
-        if(pin.length() != 8) {
-            throw new DomainException(ErrorCodeEnum.TRP0002);
-        }
     }
 
     public Integer getRemainingAttempts() {
@@ -98,26 +105,15 @@ public class TransactionPin {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = LocalDateTime.now();
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-
-        TransactionPin that = (TransactionPin) o;
-        return id.equals(that.id) && Objects.equals(pin, that.pin) && Objects.equals(wallet, that.wallet) && Objects.equals(remainingAttempts, that.remainingAttempts) && Objects.equals(createdAt, that.createdAt) && updatedAt.equals(that.updatedAt);
+        TransactionPin transactionPin = (TransactionPin) o;
+        return id != null && id.equals(transactionPin.id);
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + Objects.hashCode(pin);
-        result = 31 * result + Objects.hashCode(wallet);
-        result = 31 * result + Objects.hashCode(remainingAttempts);
-        result = 31 * result + Objects.hashCode(createdAt);
-        result = 31 * result + updatedAt.hashCode();
-        return result;
+        return Objects.hash(id);
     }
 }

@@ -111,7 +111,7 @@ public class User {
         setUpdatedAt();
     }
 
-    public void setUpdatedAt() {
+    private void setUpdatedAt() {
         this.updatedAt = LocalDateTime.now();
     }
 

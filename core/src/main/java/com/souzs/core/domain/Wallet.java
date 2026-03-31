@@ -46,7 +46,8 @@ public class Wallet {
         setUpdatedAt();
     }
 
-    public void transfer(BigDecimal value) {
+    public void transfer(BigDecimal value, String inputPin) {
+        checkValue(!transactionPin.tryPin(inputPin), ErrorCodeEnum.TR0008);
         checkValue(value.compareTo(BigDecimal.ZERO) <= 0, ErrorCodeEnum.TR0005);
         checkValue(balance.compareTo(value) < 0, ErrorCodeEnum.TR0002);
 
@@ -78,7 +79,7 @@ public class Wallet {
         setUpdatedAt();
     }
 
-    public void setUpdatedAt() {
+    private void setUpdatedAt() {
         this.updatedAt = LocalDateTime.now();
     }
 

@@ -14,68 +14,48 @@ import java.util.Objects;
 
 public class Transaction {
     private Long id;
-    private Wallet fromWallet;
-    private Wallet toWallet;
+    private Long fromWalletId;
+    private Long toWalletId;
     private BigDecimal value;
     private TransactionalStatusEnum status;
     private LocalDateTime createdAt;
 
-    public Transaction() {
+    protected Transaction() {
     }
 
     // Reconstruir
-    public Transaction(Long id, Wallet fromWallet, Wallet toWallet, BigDecimal value, TransactionalStatusEnum status, LocalDateTime createdAt) {
+    public Transaction(Long id, Long fromWalletId, Long toWalletId, BigDecimal value, TransactionalStatusEnum status, LocalDateTime createdAt) {
         this.id = id;
-        this.fromWallet = fromWallet;
-        this.toWallet = toWallet;
+        this.fromWalletId = fromWalletId;
+        this.toWalletId = toWalletId;
         this.value = value;
         this.status = status;
         this.createdAt = createdAt;
     }
 
     // Para Usecase
-    public Transaction(Wallet fromWallet, Wallet toWallet, BigDecimal value) {
-        setWallets(fromWallet, toWallet);
+    public Transaction(Long fromWalletId, Long toWalletId, BigDecimal value) {
+        setWalletsIds(fromWalletId, toWalletId);
         setValue(value);
         status = TransactionalStatusEnum.CREATED;
         createdAt = LocalDateTime.now();
     }
 
-    private void setWallets(Wallet fromWallet, Wallet toWallet) {
-        if(fromWallet == null || toWallet == null) {
+    private void setWalletsIds(Long fromWalletId, Long toWalletId) {
+        if(fromWalletId == null || toWalletId == null) {
             throw new TransferException(ErrorCodeEnum.TR0003);
         }
 
-        this.fromWallet = fromWallet;
-        this.toWallet = toWallet;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Wallet getFromWallet() {
-        return fromWallet;
-    }
-
-    public Wallet getToWallet() {
-        return toWallet;
-    }
-
-    public BigDecimal getValue() {
-        return value;
+        this.fromWalletId = fromWalletId;
+        this.toWalletId = toWalletId;
     }
 
     public void setValue(BigDecimal value) {
-        if(value.compareTo(BigDecimal.ZERO) < 0) {
+        if(value.compareTo(BigDecimal.ZERO) <= 0) {
             throw new DomainException(ErrorCodeEnum.TR0005);
         }
 
         this.value = value;
-    }
-
-    public TransactionalStatusEnum getStatus() {
-        return status;
     }
 
     public void setStatus(TransactionalStatusEnum status) {
@@ -90,27 +70,39 @@ public class Transaction {
         }
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public Long getFromWalletId() {
+        return fromWalletId;
+    }
+
+    public Long getToWalletId() {
+        return toWalletId;
+    }
+
+    public BigDecimal getValue() {
+        return value;
+    }
+
+    public TransactionalStatusEnum getStatus() {
+        return status;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        
         if (o == null || getClass() != o.getClass()) return false;
-        
-        Transaction that = (Transaction) o;
-        
-        if (id != null && that.id != null) return Objects.equals(id, that.id);
-        return Objects.equals(fromWallet, that.fromWallet) &&
-                Objects.equals(toWallet, that.toWallet) &&
-                Objects.equals(value, that.value) &&
-                Objects.equals(createdAt, that.createdAt);
+        Transaction transaction = (Transaction) o;
+        return id != null && id.equals(transaction.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(fromWallet, toWallet, value, createdAt);
+        return Objects.hash(id);
     }
 }

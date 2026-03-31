@@ -3,6 +3,8 @@ package com.souzs.core.domain;
 import com.souzs.core.exception.DomainException;
 import com.souzs.core.exception.enums.ErrorCodeEnum;
 
+import java.util.Objects;
+
 public class TaxNumber {
     private String value;
 
@@ -97,7 +99,7 @@ public class TaxNumber {
         if (o == null || getClass() != o.getClass()) return false;
 
         TaxNumber taxNumber = (TaxNumber) o;
-        return value.equals(taxNumber.value);
+        return Objects.equals(value, taxNumber.value);
     }
 
     @Override
