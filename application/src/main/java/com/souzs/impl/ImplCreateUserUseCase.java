@@ -6,19 +6,20 @@ import com.souzs.core.domain.User;
 import com.souzs.core.domain.enums.UserTypeEnum;
 import com.souzs.core.exception.DomainException;
 import com.souzs.core.exception.enums.ErrorCodeEnum;
+import com.souzs.gateway.FindUserByTaxNumberGateway;
 import com.souzs.gateway.SaveUserGateway;
 import com.souzs.usecase.*;
 
 import java.time.LocalDateTime;
 
 public class ImplCreateUserUseCase implements CreateUserUseCase {
-    private TaxNumberAvailableUseCase taxNumberAvailableUseCase;
+    private FindUserByTaxNumberGateway findUserByTaxNumberGateway;
     private EmailAvailableUseCase emailAvailableUseCase;
     private SaveUserGateway saveUserGateway;
     private CreateWalletUseCase createWalletUseCase;
 
-    public ImplCreateUserUseCase(TaxNumberAvailableUseCase taxNumberAvailableUseCase, EmailAvailableUseCase emailAvailableUseCase, SaveUserGateway saveUserGateway, CreateWalletUseCase createWalletUseCase) {
-        this.taxNumberAvailableUseCase = taxNumberAvailableUseCase;
+    public ImplCreateUserUseCase(FindUserByTaxNumberGateway findUserByTaxNumberGateway, EmailAvailableUseCase emailAvailableUseCase, SaveUserGateway saveUserGateway, CreateWalletUseCase createWalletUseCase) {
+        this.findUserByTaxNumberGateway = findUserByTaxNumberGateway;
         this.emailAvailableUseCase = emailAvailableUseCase;
         this.saveUserGateway = saveUserGateway;
         this.createWalletUseCase = createWalletUseCase;
@@ -27,7 +28,7 @@ public class ImplCreateUserUseCase implements CreateUserUseCase {
 
     @Override
     public void create(String email, String password, String fullName, String taxNumber, String type, String inputPinWallet) {
-        boolean hasTaxNumberAv = taxNumberAvailableUseCase.taxNumberAvailable(
+        User hasTaxNumberAv = findUserByTaxNumberGateway.findUserByTaxNumber(
                 taxNumber
         );
 
@@ -35,7 +36,7 @@ public class ImplCreateUserUseCase implements CreateUserUseCase {
                 email
         );
 
-        if(!hasTaxNumberAv) {
+        if(hasTaxNumberAv != null) {
             throw new DomainException(ErrorCodeEnum.ON0002);
         }
 
