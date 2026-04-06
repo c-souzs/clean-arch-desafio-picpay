@@ -9,7 +9,6 @@ import java.util.Objects;
 public class TransactionPin {
     private Long id;
     private String pin;
-    private Long walletId;
     private Integer remainingAttempts;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -19,31 +18,20 @@ public class TransactionPin {
     }
 
     // Reconstruir
-    public TransactionPin(Long id, String pin, Integer attempt, Long walletId, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public TransactionPin(Long id, String pin, Integer attempt, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.pin = pin;
-        this.walletId = walletId;
         this.remainingAttempts = attempt;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
     // Para Usecase
-    public TransactionPin(Long walletId, String pin) {
-        setWalletId(walletId);
+    public TransactionPin(String pin) {
         setPin(pin);
         this.remainingAttempts = DEFAULT_ATTEMPT;
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
-    }
-
-    private void setWalletId(Long walletId) {
-        if(walletId == null) {
-            throw new DomainException(ErrorCodeEnum.ON0006);
-        }
-
-        this.walletId = walletId;
-        setUpdatedAt();
     }
 
     public void setPin(String pin) {
@@ -75,10 +63,6 @@ public class TransactionPin {
         }
 
         return true;
-    }
-
-    public Long getWalletId() {
-        return walletId;
     }
 
     public Long getId() {

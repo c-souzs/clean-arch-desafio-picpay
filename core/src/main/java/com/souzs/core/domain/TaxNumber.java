@@ -15,7 +15,7 @@ public class TaxNumber {
     protected TaxNumber() {
     }
 
-    public void setValue(String value) {
+    private void setValue(String value) {
         if (!isValid(value)) throw new DomainException(ErrorCodeEnum.ON0001);
         this.value = value;
     }

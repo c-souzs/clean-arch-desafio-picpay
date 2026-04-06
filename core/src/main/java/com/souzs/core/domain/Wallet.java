@@ -40,25 +40,29 @@ public class Wallet {
     }
 
     public void receive(BigDecimal value) {
-        checkValue(value.compareTo(BigDecimal.ZERO) <= 0, ErrorCodeEnum.TR0007);
+        if (value.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new DomainException(ErrorCodeEnum.TR0007);
+        }
 
         this.balance = balance.add(value);
         setUpdatedAt();
     }
 
     public void transfer(BigDecimal value, String inputPin) {
-        checkValue(!transactionPin.tryPin(inputPin), ErrorCodeEnum.TR0008);
-        checkValue(value.compareTo(BigDecimal.ZERO) <= 0, ErrorCodeEnum.TR0005);
-        checkValue(balance.compareTo(value) < 0, ErrorCodeEnum.TR0002);
+        if (!transactionPin.tryPin(inputPin)) {
+            throw new TransferException(ErrorCodeEnum.TR0008);
+        }
+
+        if (value.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new TransferException(ErrorCodeEnum.TR0005);
+        }
+
+        if (balance.compareTo(value) < 0) {
+            throw new TransferException(ErrorCodeEnum.TR0002);
+        }
 
         this.balance = balance.subtract(value);
         setUpdatedAt();
-    }
-
-    private void checkValue(boolean exp, ErrorCodeEnum errorCodeEnum) {
-        if(exp) {
-            throw new TransferException(errorCodeEnum);
-        }
     }
 
     public void setTransactionPin(TransactionPin transactionPin) {
