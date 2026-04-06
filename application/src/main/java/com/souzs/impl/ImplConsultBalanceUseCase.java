@@ -1,6 +1,5 @@
 package com.souzs.impl;
 
-import com.souzs.core.domain.User;
 import com.souzs.gateway.ConsultBalanceGateway;
 import com.souzs.usecase.ConsultBalanceUseCase;
 
@@ -14,8 +13,7 @@ public class ImplConsultBalanceUseCase implements ConsultBalanceUseCase {
     }
 
     @Override
-    public BigDecimal consult(User user) {
-        Long idWallet = user.getWallet().getId();
-        return consultBalanceGateway.consultBalance(idWallet);
+    public BigDecimal consult(Long walletId) {
+        return consultBalanceGateway.consultBalance(walletId);
     }
 }

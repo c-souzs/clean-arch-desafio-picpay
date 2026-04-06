@@ -6,5 +6,5 @@ import com.souzs.core.domain.Wallet;
 import java.math.BigDecimal;
 
 public interface CreateTransactionUseCase {
-    Transaction create(Wallet from, Wallet to, BigDecimal value);
+    Transaction create(Long fromWalletId, Long toWalletId, BigDecimal value);
 }

@@ -5,35 +5,34 @@ import com.souzs.core.domain.Transaction;
 import com.souzs.core.domain.Wallet;
 import com.souzs.core.exception.TransferException;
 import com.souzs.core.exception.enums.ErrorCodeEnum;
-import com.souzs.gateway.*;
+import com.souzs.gateway.ConsultAuthorizationExternalGateway;
+import com.souzs.gateway.FindWalletByTaxNumberGateway;
+import com.souzs.gateway.SaveTransactionGateway;
+import com.souzs.gateway.UpdateWalletGateway;
 import com.souzs.usecase.CreateTransactionUseCase;
-import com.souzs.usecase.FindWalletByTaxNumberUseCase;
 import com.souzs.usecase.TransferUseCase;
 import com.souzs.usecase.UserNotificationUseCase;
 
 import java.math.BigDecimal;
 
 public class ImplTransferUseCase implements TransferUseCase {
-    private FindWalletByTaxNumberUseCase findWalletByTaxNumberUseCase;
+    private FindWalletByTaxNumberGateway findWalletByTaxNumberGateway;
     private CreateTransactionUseCase createTransactionUseCase;
-    private SaveTransferGateway saveTransferGateway;
-    private UpdateBalanceWalletGateway updateBalanceWalletGateway;
+    private SaveTransactionGateway saveTransactionGateway;
+    private UpdateWalletGateway updateWalletGateway;
     private ConsultAuthorizationExternalGateway consultAuthorizationExternalGateway;
     private UserNotificationUseCase userNotificationUseCase;
-    private SaveTransactionPinGateway saveTransactionPinGateway;
 
     public ImplTransferUseCase(
-            FindWalletByTaxNumberUseCase findWalletByTaxNumberUseCase, CreateTransactionUseCase createTransactionUseCase,
-            SaveTransferGateway saveTransferGateway, UpdateBalanceWalletGateway updateBalanceWalletGateway,
-            ConsultAuthorizationExternalGateway consultAuthorizationExternalGateway, UserNotificationUseCase userNotificationUseCase,
-            SaveTransactionPinGateway saveTransactionGateway) {
-        this.findWalletByTaxNumberUseCase = findWalletByTaxNumberUseCase;
+            FindWalletByTaxNumberGateway findWalletByTaxNumberGateway, CreateTransactionUseCase createTransactionUseCase,
+            SaveTransactionGateway saveTransactionGateway, UpdateWalletGateway updateWalletGateway,
+            ConsultAuthorizationExternalGateway consultAuthorizationExternalGateway, UserNotificationUseCase userNotificationUseCase) {
+        this.findWalletByTaxNumberGateway = findWalletByTaxNumberGateway;
         this.createTransactionUseCase = createTransactionUseCase;
-        this.saveTransferGateway = saveTransferGateway;
-        this.updateBalanceWalletGateway = updateBalanceWalletGateway;
+        this.saveTransactionGateway = saveTransactionGateway;
+        this.updateWalletGateway = updateWalletGateway;
         this.consultAuthorizationExternalGateway = consultAuthorizationExternalGateway;
         this.userNotificationUseCase = userNotificationUseCase;
-        this.saveTransactionPinGateway = saveTransactionGateway;
     }
 
     @Override
@@ -41,12 +40,12 @@ public class ImplTransferUseCase implements TransferUseCase {
         TaxNumber fromTaxNumber = new TaxNumber(from);
         TaxNumber toTaxNumber = new TaxNumber(to);
 
-        Wallet fromWallet = findWalletByTaxNumberUseCase.findByTaxNumber(fromTaxNumber);
-        Wallet toWallet = findWalletByTaxNumberUseCase.findByTaxNumber(toTaxNumber);
+        Wallet fromWallet = findWalletByTaxNumberGateway.findByTaxNumber(fromTaxNumber.getValue());
+        Wallet toWallet = findWalletByTaxNumberGateway.findByTaxNumber(toTaxNumber.getValue());
 
         Transaction transaction = createTransactionUseCase.create(
-                fromWallet,
-                toWallet,
+                fromWallet.getId(),
+                toWallet.getId(),
                 value
         );
 
@@ -64,7 +63,8 @@ public class ImplTransferUseCase implements TransferUseCase {
             // Persiste o transactionPin com a reducao
             // de tentativas restantes
             if(transferException.getCode().equals(ErrorCodeEnum.TR0008.getCode())) {
-                saveTransactionPinGateway.save(fromWallet.getTransactionPin());
+                // Atualiza a wallet completa com o TransactionPin atualizado
+                updateWalletGateway.update(fromWallet);
             }
 
             throw transferException;
@@ -72,10 +72,10 @@ public class ImplTransferUseCase implements TransferUseCase {
 
         toWallet.receive(value);
 
-        updateBalanceWalletGateway.update(toWallet);
-        updateBalanceWalletGateway.update(fromWallet);
+        updateWalletGateway.update(toWallet);
+        updateWalletGateway.update(fromWallet);
 
-        saveTransferGateway.save(transaction);
+        saveTransactionGateway.save(transaction);
 
         userNotificationUseCase.notificate(transaction);
     }

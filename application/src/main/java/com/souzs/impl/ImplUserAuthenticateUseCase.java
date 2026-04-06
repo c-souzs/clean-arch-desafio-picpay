@@ -1,6 +1,6 @@
 package com.souzs.impl;
 
-import com.souzs.core.exception.AuthenticateException;
+import com.souzs.exception.AuthenticateException;
 import com.souzs.core.exception.enums.ErrorCodeEnum;
 import com.souzs.gateway.UserAuthenticateGateway;
 import com.souzs.usecase.UserAuthenticateUseCase;

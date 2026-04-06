@@ -9,6 +9,6 @@ public interface CreateUserUseCase {
             String fullName,
             String taxNumber,
             String type,
-            String pin
+            String inputPinWallet
     );
 }

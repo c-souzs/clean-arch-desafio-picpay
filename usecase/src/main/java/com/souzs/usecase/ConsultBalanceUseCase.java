@@ -1,10 +1,7 @@
 package com.souzs.usecase;
 
-import com.souzs.core.domain.User;
-import com.souzs.core.domain.Wallet;
-
 import java.math.BigDecimal;
 
 public interface ConsultBalanceUseCase {
-    BigDecimal consult(User user);
+    BigDecimal consult(Long walletId);
 }

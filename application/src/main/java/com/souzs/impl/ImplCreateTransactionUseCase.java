@@ -15,9 +15,9 @@ public class ImplCreateTransactionUseCase implements CreateTransactionUseCase {
     }
 
     @Override
-    public Transaction create(Wallet from, Wallet to, BigDecimal value) {
+    public Transaction create(Long fromWalletId, Long toWalletId, BigDecimal value) {
         Transaction transaction = new Transaction(
-                from, to, value
+                fromWalletId, toWalletId, value
         );
 
         saveTransactionGateway.save(transaction);

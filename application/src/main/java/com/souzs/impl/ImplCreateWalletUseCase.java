@@ -14,8 +14,9 @@ public class ImplCreateWalletUseCase implements CreateWalletUseCase {
     }
 
     @Override
-    public void create(User user, TransactionPin transactionPin) {
-        Wallet wallet = new Wallet(user, transactionPin);
+    public void create(User user, String inputPinWallet) {
+        TransactionPin transactionPin = new TransactionPin(inputPinWallet);
+        Wallet wallet = new Wallet(user.getId(), transactionPin);
 
         saveWalletGateway.save(wallet);
     }

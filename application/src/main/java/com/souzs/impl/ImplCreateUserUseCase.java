@@ -16,19 +16,17 @@ public class ImplCreateUserUseCase implements CreateUserUseCase {
     private EmailAvailableUseCase emailAvailableUseCase;
     private SaveUserGateway saveUserGateway;
     private CreateWalletUseCase createWalletUseCase;
-    private CreateTransactionPinUseCase createTransactionPinUseCase;
 
-    public ImplCreateUserUseCase(TaxNumberAvailableUseCase taxNumberAvailableUseCase, EmailAvailableUseCase emailAvailableUseCase, SaveUserGateway saveUserGateway, CreateWalletUseCase createWalletUseCase, CreateTransactionPinUseCase createTransactionPinUseCase) {
+    public ImplCreateUserUseCase(TaxNumberAvailableUseCase taxNumberAvailableUseCase, EmailAvailableUseCase emailAvailableUseCase, SaveUserGateway saveUserGateway, CreateWalletUseCase createWalletUseCase) {
         this.taxNumberAvailableUseCase = taxNumberAvailableUseCase;
         this.emailAvailableUseCase = emailAvailableUseCase;
         this.saveUserGateway = saveUserGateway;
         this.createWalletUseCase = createWalletUseCase;
-        this.createTransactionPinUseCase = createTransactionPinUseCase;
     }
 
 
     @Override
-    public void create(String email, String password, String fullName, String taxNumber, String type, String pin) {
+    public void create(String email, String password, String fullName, String taxNumber, String type, String inputPinWallet) {
         boolean hasTaxNumberAv = taxNumberAvailableUseCase.taxNumberAvailable(
                 taxNumber
         );
@@ -55,8 +53,6 @@ public class ImplCreateUserUseCase implements CreateUserUseCase {
 
         userSaved = saveUserGateway.save(userSaved);
 
-        createWalletUseCase.create(userSaved, transactionPinCreated);
-
-        TransactionPin transactionPinCreated = createTransactionPinUseCase.create(userSaved, pin);
+        createWalletUseCase.create(userSaved, inputPinWallet);
     }
 }
